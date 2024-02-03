@@ -132,56 +132,56 @@ describe("class music basic functions testing", () => {
     });
 });
 
-// describe("transposeChords function testing", () => {
-//     it("should transpose chords correctly", () => {
-//         const text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
-//         const test = new Music("hello", "C", text);
-//         test.transposeChords(2);
-//         expect(test.chordsWithoutBrackets).toEqual([
-//             "F/A",
-//             "G",
-//             "F",
-//             "C/E",
-//             "Dm",
-//             "C",
-//         ]);
-//     });
+describe("transposeChords function testing", () => {
+    it("should transpose chords correctly", () => {
+        const text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
+        const test = new Music("hello", "C", text);
+        test.transposeChords(2);
+        expect(test.chordsWithoutBrackets).toEqual([
+            "F/A",
+            "G",
+            "F",
+            "C/E",
+            "Dm",
+            "C",
+        ]);
+    });
 
-//     it("should handle empty chordsWithoutBrackets array", () => {
-//         const text = "Sua graça provou Seu amor";
-//         const test = new Music("hello", "C", text);
-//         test.transposeChords(2);
-//         expect(test.chordsWithoutBrackets).toEqual([]);
-//     });
+    it("should handle empty chordsWithoutBrackets array", () => {
+        const text = "Sua graça provou Seu amor";
+        const test = new Music("hello", "C", text);
+        test.transposeChords(2);
+        expect(test.chordsWithoutBrackets).toEqual([]);
+    });
 
-//     it("should handle negative transpose value", () => {
-//         const text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
-//         const test = new Music("hello", "C", text);
-//         test.transposeChords(-1);
-//         expect(test.chordsWithoutBrackets).toEqual([
-//             "D#/F",
-//             "E",
-//             "D#",
-//             "A#/C",
-//             "Cm",
-//             "A#",
-//         ]);
-//     });
+    it("should handle negative transpose value", () => {
+        const text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
+        const test = new Music("hello", "C", text);
+        test.transposeChords(-1);
+        expect(test.chordsWithoutBrackets).toEqual([
+            "D#/F",
+            "E",
+            "D#",
+            "A#/C",
+            "Cm",
+            "A#",
+        ]);
+    });
 
-//     it("should handle transpose value of 0", () => {
-//         const text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
-//         const test = new Music("hello", "C", text);
-//         test.transposeChords(0);
-//         expect(test.chordsWithoutBrackets).toEqual([
-//             "Eb/G",
-//             "F",
-//             "Eb",
-//             "Bb/D",
-//             "Cm",
-//             "Bb",
-//         ]);
-//     });
-// });
+    it("should handle transpose value of 0", () => {
+        const text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
+        const test = new Music("hello", "C", text);
+        test.transposeChords(0);
+        expect(test.chordsWithoutBrackets).toEqual([
+            "Eb/G",
+            "F",
+            "Eb",
+            "Bb/D",
+            "Cm",
+            "Bb",
+        ]);
+    });
+});
 
 
 

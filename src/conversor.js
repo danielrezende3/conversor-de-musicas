@@ -21,10 +21,16 @@ export class Music {
 
   // Chords + lyrics
   constructor(title, tone, text) {
+    if (!title || !tone || !text) {
+      throw new Error("Title, tone, and text cannot be empty");
+    }
+
     this.title = title;
     this.tone = tone;
     this.chordsWithBrackets = this.getLyrics(text);
-    this.chordsWithoutBrackts = this.chordsWithBrackets.map((chord) => this.removeBracketFromChord(chord))
+    this.chordsWithoutBrackets = this.chordsWithBrackets.map((chord) =>
+      this.removeBracketFromChord(chord)
+    );
     this.onlyLyrics = this.getChords(text);
     this.OriginalText = text;
   }
@@ -34,7 +40,12 @@ export class Music {
   }
   getLyrics(text) {
     const regex = /\[(.*?)\]/g;
-    return text.match(regex);
+    if (text.match(regex) === null) {
+      return [];
+    } else {
+      return text.match(regex);
+
+    }
   }
   // removes "m", "0-9" and "+"
   extractSuffix(chord) {
@@ -112,5 +123,3 @@ export class Music {
     return chordPositions;
   }
 }
-
-

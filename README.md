@@ -11,3 +11,9 @@ O comando é usado para instalar as dependências do projeto.
 ```bash
 npm install
 ```
+
+Para rodar testes unitários, use o comando:
+
+```bash
+npm test
+```

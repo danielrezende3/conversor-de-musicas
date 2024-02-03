@@ -172,11 +172,3 @@ export class Music {
     this.chordsWithoutBrackets = this.chordsWithoutBrackets.map((chord) => this.changeChord(chord, value));
   }
 }
-
-let text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
-const test = new Music("hello", "C", text);
-const result = test.formatChords();
-console.log(result);
-console.log(test.onlyLyrics);
-// console.log("    Eb/G   F   Eb Bb/D Cm Bb");
-// console.log("Sua  -graça provou Seu a-mor -Bb/D-Cm-Bb");

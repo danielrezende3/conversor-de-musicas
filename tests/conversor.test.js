@@ -145,6 +145,14 @@ describe("transposeChords function testing", () => {
             "Dm",
             "C",
         ]);
+        expect(test.chordsWithBrackets).toEqual([
+            "[F/A]",
+            "[G]",
+            "[F]",
+            "[C/E]",
+            "[Dm]",
+            "[C]",
+        ]);
     });
 
     it("should handle empty chordsWithoutBrackets array", () => {
@@ -152,6 +160,7 @@ describe("transposeChords function testing", () => {
         const test = new Music("hello", "C", text);
         test.transposeChords(2);
         expect(test.chordsWithoutBrackets).toEqual([]);
+        expect(test.chordsWithBrackets).toEqual([]);
     });
 
     it("should handle negative transpose value", () => {
@@ -159,12 +168,20 @@ describe("transposeChords function testing", () => {
         const test = new Music("hello", "C", text);
         test.transposeChords(-1);
         expect(test.chordsWithoutBrackets).toEqual([
-            "D#/F",
+            "D/F#",
             "E",
-            "D#",
-            "A#/C",
-            "Cm",
-            "A#",
+            "D",
+            "A/C#",
+            "Bm",
+            "A",
+        ]);
+        expect(test.chordsWithBrackets).toEqual([
+            "[D/F#]",
+            "[E]",
+            "[D]",
+            "[A/C#]",
+            "[Bm]",
+            "[A]",
         ]);
     });
 
@@ -179,6 +196,14 @@ describe("transposeChords function testing", () => {
             "Bb/D",
             "Cm",
             "Bb",
+        ]);
+        expect(test.chordsWithBrackets).toEqual([
+            "[Eb/G]",
+            "[F]",
+            "[Eb]",
+            "[Bb/D]",
+            "[Cm]",
+            "[Bb]",
         ]);
     });
 });

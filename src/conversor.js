@@ -18,7 +18,7 @@ export class Music {
     Bb: 10,
     B: 11,
   };
-
+  text;
   // Chords + lyrics
   constructor(title, tone, text) {
     if (!title || !tone || !text) {
@@ -168,7 +168,30 @@ export class Music {
 
     return formattedChords;
   }
-  transposeChords(value){
-    this.chordsWithoutBrackets = this.chordsWithoutBrackets.map((chord) => this.changeChord(chord, value));
+  transposeChords(value) {
+    if (value === 0) {
+      this.chordsWithBrackets = this.getLyrics(this.OriginalText);
+      this.chordsWithoutBrackets = this.chordsWithBrackets.map((chord) =>
+        this.removeBracketFromChord(chord)
+      );
+    } else {
+      this.chordsWithoutBrackets = this.chordsWithoutBrackets.map((chord) => {
+        if (chord.includes("/")) {
+          let [mainChord, bassNote] = chord.split("/");
+          mainChord = this.changeChord(mainChord, value);
+          bassNote = this.changeChord(bassNote, value);
+          return mainChord + "/" + bassNote;
+        } else {
+          return this.changeChord(chord, value);
+        }
+      });
+
+      this.chordsWithBrackets = this.chordsWithBrackets.map((chord, index) => {
+        const chordWithoutBrackets = this.removeBracketFromChord(chord);
+        const transposedChord = this.chordsWithoutBrackets[index];
+        return chord.replace(chordWithoutBrackets, transposedChord);
+      });
+    }
   }
 }
+

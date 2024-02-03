@@ -19,13 +19,14 @@ export class Music {
     B: 11,
   };
 
-// Chords + lyrics
+  // Chords + lyrics
   constructor(title, tone, text) {
     this.title = title;
     this.tone = tone;
-    this.chords = this.getChords(text);
-    this.lyrics = this.getLyrics(text);
-    this.text = text;
+    this.chordsWithBrackets = this.getLyrics(text);
+    this.chordsWithoutBrackts = this.chordsWithBrackets.map((chord) => this.removeBracketFromChord(chord))
+    this.onlyLyrics = this.getChords(text);
+    this.OriginalText = text;
   }
   getChords(text) {
     const regex = /\[.*?\]/g;
@@ -78,6 +79,38 @@ export class Music {
     chord = newTone + suffix;
     return chord;
   }
-  
+  removeBracketFromChord(chord) {
+    return chord.replace(/\[|\]/g, "");
+  }
+  findChordPositions() {
+    // Initialize an array to store the positions of the chords in the text
+    var chordPositions = [];
+    var tmp_text = this.OriginalText;
+    // Initialize a variable to keep track of the length of the chords found so far
+    var removeAlreadyFound = 0;
+
+    if (this.chordsWithBrackets === null) {
+      return chordPositions;
+    }
+
+    // Loop over each chord in the chords array
+    for (let index = 0; index < this.chordsWithBrackets.length; index++) {
+      // Get the current chord
+      let element = this.chordsWithBrackets[index];
+
+      // Find the position of the current chord in the text
+      let position = tmp_text.indexOf(element);
+      let spaceSize = element.length;
+      let spaces = " ".repeat(spaceSize);
+      tmp_text = tmp_text.replace(element, spaces);
+      // Subtract the length of the chords found so far from the position and add the result to the chordPositions array
+      chordPositions.push(position - removeAlreadyFound);
+
+      // Add the length of the current chord to the total length of the chords found so far
+      removeAlreadyFound += element.length;
+    }
+    return chordPositions;
+  }
 }
+
 

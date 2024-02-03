@@ -3,12 +3,23 @@ import { describe, test, it, expect } from "vitest";
 import { Music } from "../src/conversor.js";
 
 describe("creating class music", () => {
-    it("getChords", () => {
+    test('Music constructor throws error when title is empty', () => {
+        expect(() => new Music('', 'C', 'text')).toThrow('Title, tone, and text cannot be empty')
+    })
+
+    test('Music constructor throws error when tone is empty', () => {
+        expect(() => new Music('title', '', 'text')).toThrow('Title, tone, and text cannot be empty')
+    })
+
+    test('Music constructor throws error when text is empty', () => {
+        expect(() => new Music('title', 'C', '')).toThrow('Title, tone, and text cannot be empty')
+    })
+    it("onlyLyrics", () => {
         const text = "Sua [Eb/G]gra\u00E7a pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
         const test = new Music("hello", "C", text);
         expect(test.onlyLyrics).toBe("Sua gra\u00E7a provou Seu amor ");
     });
-    it("getLyrics", () => {
+    it("chordsWithBrackets", () => {
         const text = "Sua [Eb/G]gra\u00E7a pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
         const test = new Music("hello", "C", text);
         expect(test.chordsWithBrackets).toEqual([
@@ -20,7 +31,7 @@ describe("creating class music", () => {
             "[Bb]",
         ]);
     });
-    it("chordsWithoutBrackts", () => {
+    it("chordsWithoutBrackets", () => {
         const text = "Sua [Eb/G]gra\u00E7a pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
         const test = new Music("hello", "C", text);
         expect(test.chordsWithoutBrackets).toEqual([
@@ -32,9 +43,14 @@ describe("creating class music", () => {
             "Bb",
         ]);
     });
+    it("chordPositions", () => {
+        const text = "Sua [Eb/G]gra\u00E7a pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
+        const test = new Music("hello", "C", text);
+        expect(test.chordPositions).toEqual([4, 13, 22, 26, 26, 26]);
+    });
 });
 
-describe("class music functions testing", () => {
+describe("class music basic functions testing", () => {
     it("extractSuffix should return chord without suffix and suffix", () => {
         const test = new Music("hello", "C", "abc");
         const result1 = test.extractSuffix("Am7");
@@ -106,24 +122,110 @@ describe("class music functions testing", () => {
     it("findChordPositions should return an array of chord positions in the text", () => {
         const text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
         const test = new Music("hello", "C", text);
-        const chordsWithBrackets = ["[Eb/G]", "[F]", "[Bb/D]"];
-        const result = test.findChordPositions(chordsWithBrackets, text);
-        expect(result).toEqual([4, 13, 22, 26, 26, 26]);
+        expect(test.chordPositions).toEqual([4, 13, 22, 26, 26, 26]);
     });
 
-    it("findChordPositions should return an empty array if chordsWithBrackets is null", () => {
-        const test = new Music("hello", "C", "abc");
-        const chordsWithBrackets = null;
-        const text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
-        const result = test.findChordPositions(chordsWithBrackets, text);
-        expect(result).toEqual([]);
-    });
-
-    it("findChordPositions should return an empty array if chordsWithBrackets is an empty array", () => {
-        const test = new Music("hello", "C", "abc");
-        const chordsWithBrackets = [];
-        const text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
-        const result = test.findChordPositions(chordsWithBrackets, text);
-        expect(result).toEqual([]);
+    it("findChordPositions should return an empty array if text doesn't contain any chords", () => {
+        const text = "abc";
+        const test = new Music("hello", "C", text);
+        expect(test.chordPositions).toEqual([]);
     });
 });
+
+// describe("transposeChords function testing", () => {
+//     it("should transpose chords correctly", () => {
+//         const text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
+//         const test = new Music("hello", "C", text);
+//         test.transposeChords(2);
+//         expect(test.chordsWithoutBrackets).toEqual([
+//             "F/A",
+//             "G",
+//             "F",
+//             "C/E",
+//             "Dm",
+//             "C",
+//         ]);
+//     });
+
+//     it("should handle empty chordsWithoutBrackets array", () => {
+//         const text = "Sua graça provou Seu amor";
+//         const test = new Music("hello", "C", text);
+//         test.transposeChords(2);
+//         expect(test.chordsWithoutBrackets).toEqual([]);
+//     });
+
+//     it("should handle negative transpose value", () => {
+//         const text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
+//         const test = new Music("hello", "C", text);
+//         test.transposeChords(-1);
+//         expect(test.chordsWithoutBrackets).toEqual([
+//             "D#/F",
+//             "E",
+//             "D#",
+//             "A#/C",
+//             "Cm",
+//             "A#",
+//         ]);
+//     });
+
+//     it("should handle transpose value of 0", () => {
+//         const text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
+//         const test = new Music("hello", "C", text);
+//         test.transposeChords(0);
+//         expect(test.chordsWithoutBrackets).toEqual([
+//             "Eb/G",
+//             "F",
+//             "Eb",
+//             "Bb/D",
+//             "Cm",
+//             "Bb",
+//         ]);
+//     });
+// });
+
+
+
+// describe("formatChords function testing", () => {
+//     it("should format chords and modify text correctly", () => {
+//         const chordPositions = [4, 13, 22, 26, 26, 26];
+//         const chordsWithoutBrackets = ["Eb/G", "F", "Eb", "Bb/D", "Cm", "Bb"];
+//         let text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
+
+//         const result = formatChords(chordPositions, chordsWithoutBrackets, text);
+
+//         expect(result.formattedChords).toBe("    Eb/G     F        Eb  Bb/D Cm Bb");
+//     });
+
+// it("should handle empty chordPositions and chordsWithoutBrackets arrays", () => {
+//     const chordPositions = [];
+//     const chordsWithoutBrackets = [];
+//     let text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
+
+//     const result = formatChords(chordPositions, chordsWithoutBrackets, text);
+
+//     expect(result.formattedChords).toBe("");
+//     expect(result.text).toBe("Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]");
+// });
+
+// it("should handle empty text", () => {
+//     const chordPositions = [4, 13, 22, 26, 26, 26];
+//     const chordsWithoutBrackets = ["Eb/G", "F", "Eb", "Bb/D", "Cm", "Bb"];
+//     let text = "";
+
+//     const result = formatChords(chordPositions, chordsWithoutBrackets, text);
+
+//     expect(result.formattedChords).toBe("    Eb/G   F   Eb Bb/D Cm Bb");
+//     expect(result.text).toBe("");
+// });
+
+// it("should handle no chords in the text", () => {
+//     const chordPositions = [4, 13, 22, 26, 26, 26];
+//     const chordsWithoutBrackets = ["Eb/G", "F", "Eb", "Bb/D", "Cm", "Bb"];
+//     let text = "Sua graça provou Seu amor";
+
+//     const result = formatChords(chordPositions, chordsWithoutBrackets, text);
+
+//     expect(result.formattedChords).toBe("");
+//     expect(result.text).toBe("Sua graça provou Seu amor");
+// });
+// });

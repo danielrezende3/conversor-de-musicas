@@ -32,6 +32,7 @@ export class Music {
       this.removeBracketFromChord(chord)
     );
     this.onlyLyrics = this.getChords(text);
+    this.chordPositions = this.findChordPositions(text, this.chordsWithBrackets);
     this.OriginalText = text;
   }
   getChords(text) {
@@ -93,21 +94,21 @@ export class Music {
   removeBracketFromChord(chord) {
     return chord.replace(/\[|\]/g, "");
   }
-  findChordPositions() {
+  findChordPositions(OriginalText, chordsWithBrackets) {
     // Initialize an array to store the positions of the chords in the text
     var chordPositions = [];
-    var tmp_text = this.OriginalText;
+    var tmp_text = OriginalText;
     // Initialize a variable to keep track of the length of the chords found so far
     var removeAlreadyFound = 0;
 
-    if (this.chordsWithBrackets === null) {
+    if (OriginalText === null) {
       return chordPositions;
     }
 
     // Loop over each chord in the chords array
-    for (let index = 0; index < this.chordsWithBrackets.length; index++) {
+    for (let index = 0; index < chordsWithBrackets.length; index++) {
       // Get the current chord
-      let element = this.chordsWithBrackets[index];
+      let element = chordsWithBrackets[index];
 
       // Find the position of the current chord in the text
       let position = tmp_text.indexOf(element);
@@ -122,4 +123,60 @@ export class Music {
     }
     return chordPositions;
   }
+
+  formatChords() {
+    let formattedChords = "";
+    let positionSet = new Set();
+
+    for (let index = 0; index < this.chordPositions.length; index++) {
+      const currentPosition = this.chordPositions[index];
+
+      while (formattedChords.length < currentPosition) {
+        formattedChords += " ";
+      }
+
+      if (positionSet.has(currentPosition)) {
+        formattedChords += " ";
+      }
+
+      if (
+        index > 0 &&
+        formattedChords.length === currentPosition &&
+        formattedChords[formattedChords.length - 1] !== " "
+      ) {
+        formattedChords += " ";
+        this.text =
+          this.text.substring(0, currentPosition) +
+          "-" +
+          this.text.substring(currentPosition);
+        for (let i = index; i < this.chordPositions.length; i++) {
+          this.chordPositions[i] += 1;
+        }
+      }
+
+      if (
+        currentPosition > 0 &&
+        formattedChords.length > 0 &&
+        formattedChords[formattedChords.length - 1] !== " "
+      ) {
+        formattedChords += " ";
+      }
+
+      formattedChords += this.chordsWithoutBrackets[index];
+      positionSet.add(currentPosition);
+    }
+
+    return formattedChords;
+  }
+  transposeChords(value){
+    this.chordsWithoutBrackets = this.chordsWithoutBrackets.map((chord) => this.changeChord(chord, value));
+  }
 }
+
+let text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
+const test = new Music("hello", "C", text);
+const result = test.formatChords();
+console.log(result);
+console.log(test.onlyLyrics);
+// console.log("    Eb/G   F   Eb Bb/D Cm Bb");
+// console.log("Sua  -graça provou Seu a-mor -Bb/D-Cm-Bb");

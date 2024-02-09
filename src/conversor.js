@@ -124,49 +124,32 @@ export class Music {
     return chordPositions;
   }
 
+  // wtf, this is a mess, refactor this shit
   formatChords() {
     let formattedChords = "";
-    let positionSet = new Set();
-
-    for (let index = 0; index < this.chordPositions.length; index++) {
-      const currentPosition = this.chordPositions[index];
-
-      while (formattedChords.length < currentPosition) {
-        formattedChords += " ";
+    const chordPositions = this.chordPositions;
+    let setChords = new Set();
+    for (let index = 0; index < this.chordsWithoutBrackets.length; index++) {
+      const chord = this.chordsWithoutBrackets[index];
+      const chordPosition = this.chordPositions[index];
+      const diff = formattedChords.length - chordPosition
+      if ((formattedChords.length) === chordPosition || setChords.has(chordPosition)) {
+        formattedChords += chord + " ";
       }
-
-      if (positionSet.has(currentPosition)) {
-        formattedChords += " ";
-      }
-
-      if (
-        index > 0 &&
-        formattedChords.length === currentPosition &&
-        formattedChords[formattedChords.length - 1] !== " "
-      ) {
-        formattedChords += " ";
-        this.onlyLyrics =
-          this.onlyLyrics.substring(0, currentPosition) +
-          "-" +
-          this.onlyLyrics.substring(currentPosition);
-        for (let i = index; i < this.chordPositions.length; i++) {
-          this.chordPositions[i] += 1;
+      else {
+        if (diff > 0) {
+          this.onlyLyrics = this.onlyLyrics.substring(0, chordPosition) + "-".repeat(diff) + this.onlyLyrics.substring(chordPosition);
         }
-      }
+        else {
+          console.log(chordPosition - formattedChords.length);
+          formattedChords += " ".repeat(Math.abs(diff))
+        }
+        setChords.add(chordPosition)
+        formattedChords += chord;
 
-      if (
-        currentPosition > 0 &&
-        formattedChords.length > 0 &&
-        formattedChords[formattedChords.length - 1] !== " "
-      ) {
-        formattedChords += " ";
       }
-
-      formattedChords += this.chordsWithoutBrackets[index];
-      positionSet.add(currentPosition);
     }
-
-    return formattedChords;
+    return formattedChords.trimEnd();
   }
   transposeChords(value) {
     if (value === 0) {
@@ -195,3 +178,10 @@ export class Music {
   }
 }
 
+// ---------------------------------------
+const text1 = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
+const text2 = "[Cm]Gr[Eb/F]ande é o Se[Bb]nhor!";
+const test = new Music("hello", "C", text2)
+// test.transposeChords(1);
+console.log(test.formatChords());
+console.log(test.onlyLyrics);

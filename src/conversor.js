@@ -145,10 +145,10 @@ export class Music {
         formattedChords[formattedChords.length - 1] !== " "
       ) {
         formattedChords += " ";
-        this.text =
-          this.text.substring(0, currentPosition) +
+        this.onlyLyrics =
+          this.onlyLyrics.substring(0, currentPosition) +
           "-" +
-          this.text.substring(currentPosition);
+          this.onlyLyrics.substring(currentPosition);
         for (let i = index; i < this.chordPositions.length; i++) {
           this.chordPositions[i] += 1;
         }

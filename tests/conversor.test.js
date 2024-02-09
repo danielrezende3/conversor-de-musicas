@@ -210,47 +210,21 @@ describe("transposeChords function testing", () => {
 
 
 
-// describe("formatChords function testing", () => {
-//     it("should format chords and modify text correctly", () => {
-//         const chordPositions = [4, 13, 22, 26, 26, 26];
-//         const chordsWithoutBrackets = ["Eb/G", "F", "Eb", "Bb/D", "Cm", "Bb"];
-//         let text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
+describe("formatChords function testing", () => {
+    it("should format chords and modify text correctly", () => {
+        const text1 = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
+        const test1 = new Music("hello", "C", text1)
+        expect(test1.formatChords()).toBe("    Eb/G     F        Eb  Bb/D Cm Bb");
 
-//         const result = formatChords(chordPositions, chordsWithoutBrackets, text);
+        const text2 = "[Cm]Gr[Eb/F]ande é o Se[Bb]nhor!";
+        const test2 = new Music("hello", "C", text2)
+        test2.transposeChords(0)
+        expect(test2.formatChords()).toBe("Cm Eb/F       Bb");
+        expect(test2.onlyLyrics).toBe("Gr-ande é o Senhor!");
 
-//         expect(result.formattedChords).toBe("    Eb/G     F        Eb  Bb/D Cm Bb");
-//     });
-
-// it("should handle empty chordPositions and chordsWithoutBrackets arrays", () => {
-//     const chordPositions = [];
-//     const chordsWithoutBrackets = [];
-//     let text = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
-
-//     const result = formatChords(chordPositions, chordsWithoutBrackets, text);
-
-//     expect(result.formattedChords).toBe("");
-//     expect(result.text).toBe("Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]");
-// });
-
-// it("should handle empty text", () => {
-//     const chordPositions = [4, 13, 22, 26, 26, 26];
-//     const chordsWithoutBrackets = ["Eb/G", "F", "Eb", "Bb/D", "Cm", "Bb"];
-//     let text = "";
-
-//     const result = formatChords(chordPositions, chordsWithoutBrackets, text);
-
-//     expect(result.formattedChords).toBe("    Eb/G   F   Eb Bb/D Cm Bb");
-//     expect(result.text).toBe("");
-// });
-
-// it("should handle no chords in the text", () => {
-//     const chordPositions = [4, 13, 22, 26, 26, 26];
-//     const chordsWithoutBrackets = ["Eb/G", "F", "Eb", "Bb/D", "Cm", "Bb"];
-//     let text = "Sua graça provou Seu amor";
-
-//     const result = formatChords(chordPositions, chordsWithoutBrackets, text);
-
-//     expect(result.formattedChords).toBe("");
-//     expect(result.text).toBe("Sua graça provou Seu amor");
-// });
-// });
+        const test3 = new Music("hello", "C", text2)
+        test3.transposeChords(1)
+        expect(test3.formatChords()).toBe("C#m E/F#     B");
+        expect(test3.onlyLyrics).toBe("Gr--ande é o Senhor!");
+    });
+});

@@ -128,6 +128,7 @@ export class Music {
   formatChords() {
     let formattedChords = "";
     const chordPositions = this.chordPositions;
+    let surplus = 0;
     let setChords = new Set();
     for (let index = 0; index < this.chordsWithoutBrackets.length; index++) {
       const chord = this.chordsWithoutBrackets[index];
@@ -138,14 +139,15 @@ export class Music {
       }
       else {
         if (diff > 0) {
+          surplus += diff
           this.onlyLyrics = this.onlyLyrics.substring(0, chordPosition) + "-".repeat(diff) + this.onlyLyrics.substring(chordPosition);
         }
         else {
-          console.log(chordPosition - formattedChords.length);
-          formattedChords += " ".repeat(Math.abs(diff))
+          formattedChords += " ".repeat(Math.abs(diff) + surplus)
         }
         setChords.add(chordPosition)
-        formattedChords += chord;
+        formattedChords += chord + " ";
+
 
       }
     }
@@ -182,6 +184,6 @@ export class Music {
 const text1 = "Sua [Eb/G]graça pro[F]vou Seu a[Eb]mor [Bb/D][Cm][Bb]";
 const text2 = "[Cm]Gr[Eb/F]ande é o Se[Bb]nhor!";
 const test = new Music("hello", "C", text2)
-// test.transposeChords(1);
+test.transposeChords(1);
 console.log(test.formatChords());
 console.log(test.onlyLyrics);

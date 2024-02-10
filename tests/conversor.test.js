@@ -224,7 +224,7 @@ describe("formatChords function testing", () => {
 
         const test3 = new Music("hello", "C", text2)
         test3.transposeChords(1)
-        expect(test3.formatChords()).toBe("C#m E/F#     B");
+        expect(test3.formatChords()).toBe("C#m E/F#       B");
         expect(test3.onlyLyrics).toBe("Gr--ande é o Senhor!");
     });
 });
